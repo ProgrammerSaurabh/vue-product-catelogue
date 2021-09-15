@@ -22,16 +22,7 @@
         </div>
       </div>
     </div>
-    <div v-else class="text-center">
-      <img
-        src="/images/no-products.svg"
-        class="svg-img"
-        alt="No products"
-        title="No products"
-        height="400"
-      />
-      <h1>No product found</h1>
-    </div>
+    <EmptyData v-else text="No product found" />
   </div>
 </template>
 
@@ -39,9 +30,10 @@
 import { mapState } from "vuex";
 import AddToCart from "./AddToCart";
 import RemoveFromCart from "./RemoveFromCart";
+import EmptyData from "./EmptyData";
 
 export default {
-  components: { AddToCart, RemoveFromCart },
+  components: { AddToCart, RemoveFromCart, EmptyData },
   computed: {
     ...mapState(["products", "carts"]),
     product() {
