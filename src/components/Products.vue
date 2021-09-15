@@ -2,7 +2,7 @@
   <div class="container">
     <div class="px-2">
       <router-link to="/carts" class="btn btn-primary">
-        <h4>Carts&nbsp;({{ carts.length }})</h4>
+        <h4>Carts&nbsp;({{ Object.keys(carts).length }})</h4>
       </router-link>
     </div>
     <ProductAddForm />

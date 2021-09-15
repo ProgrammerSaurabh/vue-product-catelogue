@@ -3,15 +3,29 @@ import axios from "axios";
 export const store = {
   state: {
     products: [],
-    carts: [],
+    carts: {},
   },
   mutations: {
     products(state, products) {
       state.products = products;
     },
-    carts(state, carts) {
+    updateCart(state, carts) {
       state.carts = carts;
     },
+    addToCart(state,product){
+      let cartsData = {...state.carts}
+      
+      if(!Object.keys(cartsData).includes(product.id)){
+        cartsData[product.id] = {
+          ...product,
+          quantity: 0
+        }
+      }
+
+      cartsData[product.id].quantity++
+
+      state.carts = cartsData
+    }
   },
   actions: {
     async loadProducts(context) {

@@ -18,9 +18,9 @@ export default {
   },
   methods: {
     removeFrom(id) {
-      this.$store.commit("carts", [
-        ...this.$store.state.carts.filter((cart) => cart.id != id),
-      ]);
+      let cartsData = { ...this.$store.state.carts };
+      delete cartsData[id];
+      this.$store.commit("updateCart", { ...cartsData });
     },
   },
 };

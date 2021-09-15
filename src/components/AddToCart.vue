@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     addToCart(product) {
-      this.$store.commit("carts", [product, ...this.$store.state.carts]);
+      this.$store.commit("addToCart", product);
     },
   },
 };
