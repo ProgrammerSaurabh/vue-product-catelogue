@@ -76,7 +76,6 @@ export default {
       let price = 0;
       for (const productId in this.carts) {
         if (Object.hasOwnProperty.call(this.carts, productId)) {
-          console.log(this.carts[productId].price.replaceAll(",", ""));
           price +=
             parseInt(this.carts[productId].quantity) *
             parseInt(this.carts[productId].price.replaceAll(",", ""));
