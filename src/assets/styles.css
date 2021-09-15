@@ -81,28 +81,15 @@ body {
 /* Helpers */
 
 /* Inputs */
-input {
-  width: 100%;
-  border: 1px solid #e2e2e2;
-  outline: none;
-  padding: 10px;
-  margin: 5px 0px;
-  border-radius: 5px;
+.formulate-input{
+  margin-bottom: 0.5rem !important;
 }
-
-input:focus {
-  border-width: 2px;
-  border-color: lightblue;
-}
-
-input.error {
-  border-width: 1px;
-  border-color: red;
+.formulate-input .formulate-input-element{
+  max-width: 100% !important;
 }
 /* Inputs */
 
 /* Product */
-
 .product__card {
   max-width: 300px;
   border-radius: 5px;
