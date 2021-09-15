@@ -1,0 +1,58 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Redmi 9 (Sky Blue, 4GB RAM, 64GB Storage) | 2.3GHz Mediatek Helio G35 Octa core Processor",
+      "price": "9,499",
+      "image": "https://m.media-amazon.com/images/I/71A9Vo1BatL._AC_UL320_.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Redmi 9 Power (Blazing Blue, 4GB RAM, 64GB Storage) - 6000mAh Battery |FHD+ Screen| 48MP Quad Camera | Alexa Hands-Free Capable",
+      "price": "11,499",
+      "image": "https://m.media-amazon.com/images/I/71hEzQGO5qL._AC_UL320_.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Redmi 9 (Carbon Black, 4GB RAM, 64GB Storage) | 2.3GHz Mediatek Helio G35 Octa core Processor",
+      "price": "9,499",
+      "image": "https://m.media-amazon.com/images/I/716nHhG9SWL._AC_UL320_.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Redmi Note 10 (Aqua Green, 4GB RAM, 64GB Storage) -Amoled Dot Display | 48MP Sony Sensor IMX582 | Snapdragon 678 Processor",
+      "price": "13,999",
+      "image": "https://m.media-amazon.com/images/I/810GQ7CWdDL._AC_UL320_.jpg"
+    },
+    {
+      "id": 5,
+      "name": "OnePlus Bullets Wireless Z Bass Edition (Bold Black)",
+      "price": "1,999",
+      "image": "https://m.media-amazon.com/images/I/51R4FJdgbMS._AC_UL320_.jpg"
+    },
+    {
+      "id": 6,
+      "name": "Redmi 9A (Nature Green, 2GB RAM, 32GB Storage) | 2GHz Octa-core Helio G25 Processor | 5000 mAh Battery",
+      "price": "6,999",
+      "image": "https://m.media-amazon.com/images/I/71sxlhYhKWL._AC_UL320_.jpg"
+    },
+    {
+      "id": 7,
+      "name": "boAt Airdopes 121v2 Truly Wireless Bluetooth in Ear Earbuds with Mic (Active Black)",
+      "price": "1,299",
+      "image": "https://m.media-amazon.com/images/I/71ByNT34bfL._AC_UL320_.jpg"
+    },
+    {
+      "id": 8,
+      "name": "Mi Power Bank 3i 20000mAh | 18W Fast PD Charging | Input- Type C and Micro USB| Triple Output | Sandstone Black",
+      "price": "1,699",
+      "image": "https://m.media-amazon.com/images/I/71lVwl3q-kL._AC_UL320_.jpg"
+    },
+    {
+      "id": 9,
+      "name": "DURVIKA Universal Mobile Phone Stand with Card Holder (Silver)",
+      "price": "349",
+      "image": "https://m.media-amazon.com/images/I/51DDZQYjD8L._AC_UL320_.jpg"
+    }
+  ]
+}
