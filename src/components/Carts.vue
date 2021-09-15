@@ -33,11 +33,7 @@
               <button @click="decreaseQuantity(product)">
                 <i class="fa fa-minus"></i>
               </button>
-              <input
-                type="number"
-                class="product_quantity_input"
-                v-model="product.quantity"
-              />
+              <div class="product_quantity_box">{{ product.quantity }}</div>
               <button @click="increaseQuantity(product)">
                 <i class="fa fa-plus"></i>
               </button>
@@ -45,6 +41,14 @@
           </td>
           <td>
             <RemoveFromCart :product="product" />
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td>Total Price</td>
+          <td>
+            <h3>&#8377; {{ totalPrice }}</h3>
           </td>
         </tr>
       </table>
@@ -68,6 +72,19 @@ export default {
   },
   computed: {
     ...mapState(["carts"]),
+    totalPrice() {
+      let price = 0;
+      for (const productId in this.carts) {
+        if (Object.hasOwnProperty.call(this.carts, productId)) {
+          console.log(this.carts[productId].price.replaceAll(",", ""));
+          price +=
+            parseInt(this.carts[productId].quantity) *
+            parseInt(this.carts[productId].price.replaceAll(",", ""));
+        }
+      }
+
+      return price;
+    },
   },
   methods: {
     decreaseQuantity(product) {
@@ -136,10 +153,12 @@ th {
   height: 100%;
 }
 
-.product_quantity_input {
+.product_quantity_box {
   outline: none;
   padding: 5px;
   border: 1px solid #d2d2d2;
-  max-width: 10ch;
+  width: 30px;
+  text-align: center;
+  margin: 0 5px;
 }
 </style>
