@@ -44,8 +44,10 @@
           </td>
         </tr>
         <tr>
-          <td></td>
-          <td></td>
+          <td>Quantity</td>
+          <td>
+            <h3>{{ totalQuantity }}</h3>
+          </td>
           <td>Total Price</td>
           <td>
             <h3>&#8377; {{ totalPrice }}</h3>
@@ -83,6 +85,16 @@ export default {
       }
 
       return price;
+    },
+    totalQuantity() {
+      let quantity = 0;
+      for (const productId in this.carts) {
+        if (Object.hasOwnProperty.call(this.carts, productId)) {
+          quantity += parseInt(this.carts[productId].quantity);
+        }
+      }
+
+      return quantity;
     },
   },
   methods: {
