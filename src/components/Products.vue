@@ -1,10 +1,5 @@
 <template>
   <div class="container">
-    <div class="px-2">
-      <router-link to="/carts" class="btn btn-primary">
-        <h4>Carts&nbsp;({{ Object.keys(carts).length }})</h4>
-      </router-link>
-    </div>
     <ProductAddForm />
     <hr />
     <div v-if="products.length > 0" class="products__grid py-2">
@@ -46,7 +41,7 @@ export default {
     Product,
   },
   computed: {
-    ...mapState(["products", "carts"]),
+    ...mapState(["products"]),
   },
   data() {
     return {

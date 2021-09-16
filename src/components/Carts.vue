@@ -14,7 +14,7 @@
           <th>Actions</th>
         </tr>
         <tr v-for="product of carts" :key="product.id">
-          <td>
+          <td class="img-container">
             <img
               :src="product.image"
               :alt="product.name"
@@ -171,5 +171,9 @@ th {
   width: 30px;
   text-align: center;
   margin: 0 5px;
+}
+
+.img-container {
+  text-align: center;
 }
 </style>
