@@ -12,25 +12,25 @@ export const store = {
     updateCart(state, carts) {
       state.carts = carts;
     },
-    addToCart(state,product){
-      let cartsData = {...state.carts}
-      
-      if(!Object.keys(cartsData).includes(product.id)){
+    addToCart(state, product) {
+      let cartsData = { ...state.carts };
+
+      if (!Object.keys(cartsData).includes(product.id)) {
         cartsData[product.id] = {
           ...product,
-          quantity: 0
-        }
+          quantity: 0,
+        };
       }
 
-      cartsData[product.id].quantity++
+      cartsData[product.id].quantity++;
 
-      state.carts = cartsData
-    }
+      state.carts = cartsData;
+    },
   },
   actions: {
     async loadProducts(context) {
       try {
-        const { data } = await axios.get("products.json");
+        const { data } = await axios.get("/products.json");
 
         context.commit("products", data.products);
       } catch (error) {

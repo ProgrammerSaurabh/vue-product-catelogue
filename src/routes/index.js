@@ -5,4 +5,8 @@ export const routes = [
     component: () => import("../components/ProductDetail"),
   },
   { path: "/carts", component: () => import("../components/Carts") },
+  {
+    path: "/login/callback",
+    component: () => import("../components/Authorize"),
+  },
 ];
