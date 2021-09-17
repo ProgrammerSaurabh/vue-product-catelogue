@@ -5,8 +5,8 @@
         <h1>Products catalogue</h1>
       </router-link>
       <ul>
-        <li @click="login">Login</li>
-        <!-- <li>Logout</li> -->
+        <li v-if="!loggedIn" @click="login">Login</li>
+        <li v-else @click="logout">Logout</li>
         <li>
           <router-link to="/carts">
             <div class="cart-container">
@@ -25,18 +25,31 @@
 <script>
 import { mapState } from "vuex";
 import Cookies from "js-cookie";
-import Base64 from "crypto-js/enc-base64";
-import sha256 from "crypto-js/sha256";
+import CryptoJS from "crypto-js/crypto-js";
 
 export default {
   computed: {
-    ...mapState(["carts"]),
+    ...mapState(["carts", "loggedIn"]),
   },
   methods: {
     callbackUrl() {
       return window.location.origin + "/login/callback";
     },
-
+    getCodeChallenge() {
+      var verifier = Cookies.get("code-verifier");
+      if (undefined == verifier) {
+        verifier = this.randomString(58);
+        Cookies.set("code-verifier", verifier);
+      }
+      return this.base64URL(CryptoJS.SHA256(verifier));
+    },
+    base64URL(string) {
+      return string
+        .toString(CryptoJS.enc.Base64)
+        .replace(/=/g, "")
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_");
+    },
     randomString(length) {
       var result = "";
       var characters =
@@ -52,18 +65,28 @@ export default {
     login() {
       const a = document.createElement("a");
 
-      Cookies.set("auth-state", this.randomString(16));
-      Cookies.set("code-verifier", this.randomString(43));
+      if (!Cookies.get("auth-state")) {
+        Cookies.set("auth-state", this.randomString(16));
+      }
+
+      const codeChallege = this.getCodeChallenge();
+
       const state = Cookies.get("auth-state");
-      const verifier = Cookies.get("code-verifier");
 
       a.href = `${process.env.VUE_APP_API_URL}/oauth2/v1/authorize?client_id=${
         process.env.VUE_APP_CLIENT_ID
-      }&response_type=code&response_mode=query&scope=offline_access&redirect_uri=${this.callbackUrl()}&state=${state}&code_challenge_method=S256&code_challenge=${Base64.stringify(
-        sha256(verifier)
-      )}`;
+      }&response_type=code&response_mode=query&scope=offline_access&redirect_uri=${this.callbackUrl()}&state=${state}&code_challenge_method=S256&code_challenge=${codeChallege}`;
 
       a.click();
+    },
+    logout() {
+      Cookies.remove("loggedIn");
+      Cookies.remove("_token");
+      Cookies.remove("expires_in");
+      Cookies.remove("refresh_token");
+      Cookies.remove("auth-state");
+      Cookies.remove("code-verifier");
+      this.$store.commit("loggedIn", false);
     },
   },
 };

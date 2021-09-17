@@ -63,32 +63,45 @@ export default {
       return window.location.origin + "/login/callback";
     },
     async getToken() {
-      try {
-        const { data: response } = await fetch(
-          `${process.env.VUE_APP_API_URL}/oauth2/v1/token`,
-          {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: JSON.stringify({
-              grant_type: "authorization_code",
-              client_id: process.env.VUE_APP_CLIENT_ID,
-              redirect_uri: this.callbackUrl(),
-              code: this.$route.query.code,
-              code_verifier: Cookies.get("code-verifier"),
-            }),
-          }
-        );
+      var headers = new Headers();
+      headers.append("Accept", "application/json");
+      headers.append("Content-Type", "application/x-www-form-urlencoded");
 
-        console.log(response);
-      } catch (error) {
-        this.valid = false;
-        this.title = "401";
-        this.text = "Unauthorized";
-      }
+      var urlencoded = new URLSearchParams();
+      urlencoded.append("grant_type", "authorization_code");
+      urlencoded.append("client_id", process.env.VUE_APP_CLIENT_ID);
+      urlencoded.append("redirect_uri", this.callbackUrl());
+      urlencoded.append("code", this.$route.query.code);
+      urlencoded.append("code_verifier", Cookies.get("code-verifier"));
+
+      var requestOptions = {
+        method: "POST",
+        headers: headers,
+        body: urlencoded,
+      };
+
+      const inst = this;
+
+      await fetch(
+        `${process.env.VUE_APP_API_URL}/oauth2/v1/token`,
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then(function (result) {
+          inst.$store.commit("loggedIn", true);
+          inst.$store.commit("_token", result.access_token);
+          Cookies.set("loggedIn", true);
+          Cookies.set("_token", result.access_token);
+          Cookies.set("expires_in", result.expires_in);
+          Cookies.set("refresh_token", result.refresh_token);
+          inst.$router.push("/");
+        })
+        .catch(function (error) {
+          console.log("error", error);
+          inst.valid = false;
+          inst.title = "401";
+          inst.text = "Unauthorized";
+        });
     },
   },
 };

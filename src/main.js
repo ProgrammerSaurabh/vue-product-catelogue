@@ -21,7 +21,7 @@ Vue.use(VueMeta, {
 
 new Vue({
   render: (h) => h(App),
-  methods: Vuex.mapActions(["loadProducts"]),
+  methods: Vuex.mapActions(["loadProducts", "checkAuth"]),
   store: new Vuex.Store(store),
   router: new VueRouter({
     mode: "history",
@@ -29,5 +29,6 @@ new Vue({
   }),
   mounted() {
     this.loadProducts();
+    this.checkAuth();
   },
 }).$mount("#app");
