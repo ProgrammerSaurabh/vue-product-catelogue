@@ -18,8 +18,6 @@
 
 <script>
 import Cookies from "js-cookie";
-import Base64 from "crypto-js/enc-base64";
-import sha256 from "crypto-js/sha256";
 
 export default {
   metaInfo: {
@@ -73,13 +71,14 @@ export default {
             mode: "no-cors",
             headers: {
               "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/x-www-form-urlencoded",
             },
             body: JSON.stringify({
               grant_type: "authorization_code",
               client_id: process.env.VUE_APP_CLIENT_ID,
               redirect_uri: this.callbackUrl(),
               code: this.$route.query.code,
-              code_verifier: Base64.stringify(sha256(this.randomString(43))),
+              code_verifier: Cookies.get("code-verifier"),
             }),
           }
         );

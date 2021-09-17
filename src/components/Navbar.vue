@@ -24,29 +24,44 @@
 
 <script>
 import { mapState } from "vuex";
-import { MD5 } from "crypto-js";
 import Cookies from "js-cookie";
+import Base64 from "crypto-js/enc-base64";
+import sha256 from "crypto-js/sha256";
 
 export default {
   computed: {
     ...mapState(["carts"]),
   },
   methods: {
-    generateRandomString() {
-      return MD5(new Date().getTime());
-    },
     callbackUrl() {
       return window.location.origin + "/login/callback";
+    },
+
+    randomString(length) {
+      var result = "";
+      var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
     },
     login() {
       const a = document.createElement("a");
 
-      Cookies.set("auth-state", this.generateRandomString());
+      Cookies.set("auth-state", this.randomString(16));
+      Cookies.set("code-verifier", this.randomString(43));
       const state = Cookies.get("auth-state");
+      const verifier = Cookies.get("code-verifier");
 
       a.href = `${process.env.VUE_APP_API_URL}/oauth2/v1/authorize?client_id=${
         process.env.VUE_APP_CLIENT_ID
-      }&response_type=code&response_mode=query&scope=offline_access&redirect_uri=${this.callbackUrl()}&state=${state}&code_challenge_method=S256&code_challenge=${state}`;
+      }&response_type=code&response_mode=query&scope=offline_access&redirect_uri=${this.callbackUrl()}&state=${state}&code_challenge_method=S256&code_challenge=${Base64.stringify(
+        sha256(verifier)
+      )}`;
 
       a.click();
     },
