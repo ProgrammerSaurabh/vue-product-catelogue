@@ -7,7 +7,7 @@
       <ul>
         <li v-if="!loggedIn" @click="login">Login</li>
         <li v-else @click="logout">Logout</li>
-        <li>
+        <li v-if="loggedIn">
           <router-link to="/carts">
             <div class="cart-container">
               <i class="fa fa-shopping-cart"></i>
@@ -35,7 +35,7 @@ export default {
     callbackUrl() {
       return window.location.origin + "/login/callback";
     },
-    getCodeChallenge() {
+    codeChallege() {
       var verifier = Cookies.get("code-verifier");
       if (undefined == verifier) {
         verifier = this.randomString(58);
@@ -69,7 +69,7 @@ export default {
         Cookies.set("auth-state", this.randomString(16));
       }
 
-      const codeChallege = this.getCodeChallenge();
+      const codeChallege = this.codeChallege();
 
       const state = Cookies.get("auth-state");
 
@@ -80,12 +80,15 @@ export default {
       a.click();
     },
     logout() {
-      Cookies.remove("loggedIn");
-      Cookies.remove("_token");
-      Cookies.remove("expires_in");
-      Cookies.remove("refresh_token");
-      Cookies.remove("auth-state");
-      Cookies.remove("code-verifier");
+      [
+        "loggedIn",
+        "_token",
+        "expires_in",
+        "refresh_token",
+        "auth-state",
+        "code-verifier",
+      ].forEach((key) => Cookies.remove(key));
+
       this.$store.commit("loggedIn", false);
     },
   },

@@ -7,11 +7,6 @@
         v-for="product in products"
         :key="product.id"
         :product="product"
-        @editProduct="
-          (data) => {
-            editProduct = data;
-          }
-        "
       />
     </div>
     <div v-else class="text-center">
@@ -42,11 +37,6 @@ export default {
   },
   computed: {
     ...mapState(["products"]),
-  },
-  data() {
-    return {
-      editProduct: null,
-    };
   },
 };
 </script>

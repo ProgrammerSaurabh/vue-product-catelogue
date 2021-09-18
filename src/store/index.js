@@ -49,11 +49,13 @@ export const store = {
     checkAuth(context) {
       if (!Cookies.get("loggedIn")) {
         context.commit("loggedIn", false);
+        context.commit("_token", null);
         return;
       }
 
       if (Cookies.get("loggedIn") && Cookies.get("loggedIn") === "true") {
         context.commit("loggedIn", true);
+        context.commit("_token", Cookies.get("_token"));
       }
     },
   },

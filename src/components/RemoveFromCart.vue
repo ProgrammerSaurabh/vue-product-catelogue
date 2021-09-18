@@ -1,5 +1,6 @@
 <template>
   <button
+    v-if="loggedIn"
     class="btn btn-danger"
     :title="`Remove ${product.name} from cart`"
     @click="removeFrom(product.id)"
@@ -9,7 +10,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
+  computed: {
+    ...mapState(["loggedIn"]),
+  },
   props: {
     product: {
       type: Object,

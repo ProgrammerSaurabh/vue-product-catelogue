@@ -4,9 +4,18 @@ export const routes = [
     path: "/products/:id",
     component: () => import("../components/ProductDetail"),
   },
-  { path: "/carts", component: () => import("../components/Carts") },
+  {
+    path: "/carts",
+    component: () => import("../components/Carts"),
+    meta: {
+      auth: true,
+    },
+  },
   {
     path: "/login/callback",
     component: () => import("../components/Authorize"),
+    meta: {
+      guest: true,
+    },
   },
 ];

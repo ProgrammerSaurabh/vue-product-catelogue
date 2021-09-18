@@ -1,5 +1,6 @@
 <template>
   <button
+    v-if="loggedIn"
     class="btn btn-primary"
     :title="`Add ${product.name} to cart`"
     @click="addToCart(product)"
@@ -9,7 +10,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
+  computed: {
+    ...mapState(["loggedIn"]),
+  },
   props: {
     product: {
       type: Object,
@@ -18,7 +24,7 @@ export default {
   },
   methods: {
     addToCart(product) {
-      this.$store.commit("addToCart", product);
+      this.loggedIn && this.$store.commit("addToCart", product);
     },
   },
 };
