@@ -100,6 +100,9 @@ export default {
           Cookies.set("_token", result.access_token);
           Cookies.set("expires_in", result.expires_in);
           Cookies.set("refresh_token", result.refresh_token);
+
+          inst.$store.dispatch("fetchUser");
+
           inst.$router.push("/");
         })
         .catch(function (error) {

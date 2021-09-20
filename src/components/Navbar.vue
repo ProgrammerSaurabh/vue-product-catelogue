@@ -6,7 +6,14 @@
       </router-link>
       <ul>
         <li v-if="!loggedIn" @click="login">Login</li>
-        <li v-else @click="logout">Logout</li>
+        <li v-else class="drop-down">
+          {{ user.name }}
+          <ul class="drop-down-menu">
+            <li @click="logout">
+              <i class="fa fa-sign-out-alt"></i>&nbsp;Logout
+            </li>
+          </ul>
+        </li>
         <li v-if="loggedIn">
           <router-link to="/carts">
             <div class="cart-container">
@@ -29,7 +36,7 @@ import CryptoJS from "crypto-js/crypto-js";
 
 export default {
   computed: {
-    ...mapState(["carts", "loggedIn"]),
+    ...mapState(["carts", "loggedIn", "user"]),
   },
   methods: {
     callbackUrl() {
@@ -75,7 +82,13 @@ export default {
 
       a.href = `${process.env.VUE_APP_API_URL}/oauth2/v1/authorize?client_id=${
         process.env.VUE_APP_CLIENT_ID
-      }&response_type=code&response_mode=query&scope=offline_access&redirect_uri=${this.callbackUrl()}&state=${state}&code_challenge_method=S256&code_challenge=${codeChallege}`;
+      }&response_type=code&response_mode=query&scope=${[
+        "offline_access",
+        "openid",
+        "profile",
+      ].join(
+        " "
+      )}&redirect_uri=${this.callbackUrl()}&state=${state}&code_challenge_method=S256&code_challenge=${codeChallege}`;
 
       a.click();
     },

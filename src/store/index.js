@@ -7,6 +7,7 @@ export const store = {
     carts: {},
     loggedIn: false,
     _token: null,
+    user: {},
   },
   mutations: {
     products(state, products) {
@@ -17,6 +18,9 @@ export const store = {
     },
     _token(state, _token) {
       state._token = _token;
+    },
+    user(state, user) {
+      state.user = user;
     },
     updateCart(state, carts) {
       state.carts = carts;
@@ -56,6 +60,17 @@ export const store = {
       if (Cookies.get("loggedIn") && Cookies.get("loggedIn") === "true") {
         context.commit("loggedIn", true);
         context.commit("_token", Cookies.get("_token"));
+      }
+    },
+    async fetchUser(context) {
+      try {
+        const { data: user } = await axios.get(
+          `${process.env.VUE_APP_API_URL}/oauth2/v1/userinfo`
+        );
+
+        context.commit("user", user);
+      } catch (error) {
+        console.log(error);
       }
     },
   },

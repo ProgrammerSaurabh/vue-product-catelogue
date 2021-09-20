@@ -159,6 +159,38 @@ header nav ul li a {
 header nav ul li:not(:last-child) {
   margin-right: 15px;
 }
+
+.drop-down {
+  position: relative;
+}
+
+.drop-down-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  border-radius: 5px;
+  min-width: 100%;
+}
+
+ul.drop-down-menu {
+  list-style: none;
+  padding: 10px 5px;
+  display: none;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+
+.drop-down-menu li {
+  color: black !important;
+}
+
+.drop-down:focus > .drop-down-menu,
+.drop-down:hover > .drop-down-menu {
+  display: flex;
+}
 /* Navbar */
 
 /* Inputs */
