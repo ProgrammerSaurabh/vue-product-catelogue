@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { callbackUrl } from "../helpers";
 
 export const store = {
   state: {
@@ -72,6 +73,48 @@ export const store = {
       } catch (error) {
         console.log(error);
       }
+    },
+    refreshToken(context) {
+      return new Promise((resolve, reject) => {
+        try {
+          const headers = new Headers();
+          headers.append("Accept", "application/json");
+          headers.append("Content-Type", "application/x-www-form-urlencoded");
+
+          const urlencoded = new URLSearchParams();
+          urlencoded.append("grant_type", "refresh_token");
+          urlencoded.append("client_id", process.env.VUE_APP_CLIENT_ID);
+          urlencoded.append("redirect_uri", callbackUrl());
+          urlencoded.append("refresh_token", Cookies.get("refresh_token"));
+
+          const requestOptions = {
+            method: "POST",
+            headers: headers,
+            body: urlencoded,
+          };
+
+          fetch(
+            `${process.env.VUE_APP_API_URL}/oauth2/v1/token`,
+            requestOptions
+          )
+            .then((response) => response.json())
+            .then(function(result) {
+              context.commit("_token", result.access_token);
+              Cookies.set("loggedIn", true);
+              Cookies.set("_token", result.access_token);
+              Cookies.set("expires_in", result.expires_in);
+              Cookies.set("refresh_token", result.refresh_token);
+
+              return resolve(result);
+            })
+            .catch(function(error) {
+              console.log("error", error);
+            });
+        } catch (error) {
+          console.log(error);
+          return reject(error);
+        }
+      });
     },
   },
 };

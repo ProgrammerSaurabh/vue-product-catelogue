@@ -19,6 +19,7 @@
 <script>
 import Cookies from "js-cookie";
 import { mapState } from "vuex";
+import { callbackUrl } from "../helpers";
 
 export default {
   computed: {
@@ -65,9 +66,6 @@ export default {
       }
       return result;
     },
-    callbackUrl() {
-      return window.location.origin + "/login/callback";
-    },
     async getToken() {
       const headers = new Headers();
       headers.append("Accept", "application/json");
@@ -76,7 +74,7 @@ export default {
       const urlencoded = new URLSearchParams();
       urlencoded.append("grant_type", "authorization_code");
       urlencoded.append("client_id", process.env.VUE_APP_CLIENT_ID);
-      urlencoded.append("redirect_uri", this.callbackUrl());
+      urlencoded.append("redirect_uri", callbackUrl());
       urlencoded.append("code", this.$route.query.code);
       urlencoded.append("code_verifier", Cookies.get("code-verifier"));
 
