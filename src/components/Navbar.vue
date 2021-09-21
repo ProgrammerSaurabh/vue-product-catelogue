@@ -93,16 +93,7 @@ export default {
       a.click();
     },
     logout() {
-      [
-        "loggedIn",
-        "_token",
-        "expires_in",
-        "refresh_token",
-        "auth-state",
-        "code-verifier",
-      ].forEach((key) => Cookies.remove(key));
-
-      this.$store.commit("loggedIn", false);
+      this.$store.dispatch("clearData");
     },
   },
 };

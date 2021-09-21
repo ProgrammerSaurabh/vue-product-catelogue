@@ -52,13 +52,20 @@ export const store = {
       }
     },
     checkAuth(context) {
-      if (!Cookies.get("loggedIn")) {
+      const token = Cookies.get("_token");
+
+      if (!Cookies.get("loggedIn") || !token) {
         context.commit("loggedIn", false);
         context.commit("_token", null);
+        context.commit("user", {});
         return;
       }
 
-      if (Cookies.get("loggedIn") && Cookies.get("loggedIn") === "true") {
+      if (
+        Cookies.get("loggedIn") &&
+        Cookies.get("loggedIn") === "true" &&
+        token
+      ) {
         context.commit("loggedIn", true);
         context.commit("_token", Cookies.get("_token"));
       }
@@ -75,46 +82,59 @@ export const store = {
       }
     },
     refreshToken(context) {
-      return new Promise((resolve, reject) => {
-        try {
-          const headers = new Headers();
-          headers.append("Accept", "application/json");
-          headers.append("Content-Type", "application/x-www-form-urlencoded");
+      const headers = new Headers();
+      headers.append("Accept", "application/json");
+      headers.append("Content-Type", "application/x-www-form-urlencoded");
 
-          const urlencoded = new URLSearchParams();
-          urlencoded.append("grant_type", "refresh_token");
-          urlencoded.append("client_id", process.env.VUE_APP_CLIENT_ID);
-          urlencoded.append("redirect_uri", callbackUrl());
-          urlencoded.append("refresh_token", Cookies.get("refresh_token"));
+      const urlencoded = new URLSearchParams();
+      urlencoded.append("grant_type", "refresh_token");
+      urlencoded.append("client_id", process.env.VUE_APP_CLIENT_ID);
+      urlencoded.append("redirect_uri", callbackUrl());
+      urlencoded.append("refresh_token", Cookies.get("refresh_token"));
 
-          const requestOptions = {
-            method: "POST",
-            headers: headers,
-            body: urlencoded,
-          };
+      const requestOptions = {
+        method: "POST",
+        headers: headers,
+        body: urlencoded,
+      };
+      fetch(`${process.env.VUE_APP_API_URL}/oauth2/v1/token`, requestOptions)
+        .then((res) => {
+          if (res.status >= 200 && res.status <= 299) {
+            return res.json();
+          } else {
+            throw Error(res);
+          }
+        })
+        .then((response) => {
+          context.commit("_token", response.access_token);
+          context.commit("loggedIn", true);
 
-          fetch(
-            `${process.env.VUE_APP_API_URL}/oauth2/v1/token`,
-            requestOptions
-          )
-            .then((response) => response.json())
-            .then(function(result) {
-              context.commit("_token", result.access_token);
-              Cookies.set("loggedIn", true);
-              Cookies.set("_token", result.access_token);
-              Cookies.set("expires_in", result.expires_in);
-              Cookies.set("refresh_token", result.refresh_token);
+          Cookies.set("loggedIn", true);
+          Cookies.set("_token", response.access_token);
+          Cookies.set("expires_in", response.expires_in);
+          Cookies.set("refresh_token", response.refresh_token);
 
-              return resolve(result);
-            })
-            .catch(function(error) {
-              console.log("error", error);
-            });
-        } catch (error) {
-          console.log(error);
-          return reject(error);
-        }
-      });
+          context.dispatch("fetchUser");
+        })
+        .catch((error) => {
+          console.log("error", error);
+          context.dispatch("clearData");
+        });
+    },
+    clearData(context) {
+      [
+        "loggedIn",
+        "_token",
+        "expires_in",
+        "refresh_token",
+        "auth-state",
+        "code-verifier",
+      ].forEach((key) => Cookies.remove(key));
+
+      context.commit("loggedIn", false);
+      context.commit("_token", null);
+      context.commit("user", {});
+      context.commit("updateCart", {});
     },
   },
 };

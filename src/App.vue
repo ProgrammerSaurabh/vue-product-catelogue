@@ -14,7 +14,7 @@ import Cookies from "js-cookie";
 
 export default {
   components: { Navbar },
-  async mounted() {
+  mounted() {
     const this_ = this;
 
     axios.interceptors.request.use((config) => {
@@ -33,10 +33,9 @@ export default {
 
     axios.interceptors.response.use(
       (config) => config,
-      async (error) => {
-        if (error.response.status === 401) {
-          await this_.$store.dispatch("refreshToken");
-          await this_.$store.dispatch("fetchUser");
+      (error) => {
+        if (error.response.status === 401 && Cookies.get("refresh_token")) {
+          this_.$store.dispatch("refreshToken");
         }
         throw error;
       }
