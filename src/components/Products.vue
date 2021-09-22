@@ -7,6 +7,7 @@
         v-for="product in products"
         :key="product.id"
         :product="product"
+        data-testid="product"
       />
     </div>
     <div v-else class="text-center">

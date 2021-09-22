@@ -17,7 +17,7 @@ describe("ProductAddForm", () => {
     await store.commit("products", products);
   });
 
-  it("check whether products add", async () => {
+  it("adds product", async () => {
     const wrapper = mount(ProductAddForm, {
       store,
       localVue,
@@ -36,12 +36,6 @@ describe("ProductAddForm", () => {
     await wrapper.find("[data-testid='product-add-button']").trigger("click");
 
     await flushPromises();
-
-    // expect(store.state.products).toEqual(
-    //   expect.arrayContaining([
-    //     expect.objectContaining({ id, name, price, image }),
-    //   ])
-    // );
 
     expect(store.state.products[0]["name"]).toBe(name);
     expect(store.state.products[0]["price"]).toBe(price);
