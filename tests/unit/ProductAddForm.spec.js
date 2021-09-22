@@ -23,7 +23,6 @@ describe("ProductAddForm", () => {
       localVue,
     });
 
-    const id = store.state.products.length + 1;
     const name = "Product1";
     const price = "9,999";
     const image = "https://via.placeholder.com/150";
@@ -34,20 +33,19 @@ describe("ProductAddForm", () => {
 
     expect(store.state.products).toHaveLength(9);
 
-    await store.commit("products", [
-      ...store.state.products,
-      { id, name, price, image },
-    ]);
-    // await wrapper.find("button").trigger("click");
+    await wrapper.find("[data-testid='product-add-button']").trigger("click");
 
     await flushPromises();
 
-    expect(store.state.products).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ id, name, price, image }),
-      ])
-    );
+    // expect(store.state.products).toEqual(
+    //   expect.arrayContaining([
+    //     expect.objectContaining({ id, name, price, image }),
+    //   ])
+    // );
 
+    expect(store.state.products[0]["name"]).toBe(name);
+    expect(store.state.products[0]["price"]).toBe(price);
+    expect(store.state.products[0]["image"]).toBe(image);
     expect(store.state.products).toHaveLength(10);
   });
 });

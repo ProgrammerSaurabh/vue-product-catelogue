@@ -1,12 +1,13 @@
 <template>
   <div class="px-2 pb-2">
     <h2 class="py-2">Add product</h2>
-    <FormulateForm name="product-add" :values="product" @submit="addProduct">
+    <FormulateForm name="product-add">
       <FormulateInput
         type="text"
         name="name"
         validation="required"
         label="Product name"
+        v-model="product.name"
         data-testid="product-name"
       />
       <FormulateInput
@@ -14,6 +15,7 @@
         name="price"
         validation="required"
         label="Product price"
+        v-model="product.price"
         data-testid="product-price"
       />
       <FormulateInput
@@ -22,11 +24,13 @@
         validation="required"
         help="Image url to be added"
         label="Product image"
+        v-model="product.image"
         data-testid="product-image"
       />
       <FormulateInput
         data-testid="product-add-button"
-        type="submit"
+        type="button"
+        @click="addProduct"
         label="Add product"
       />
     </FormulateForm>
@@ -45,12 +49,16 @@ export default {
   },
   data() {
     return {
-      product: {},
+      product: {
+        name: null,
+        price: null,
+        image: null,
+      },
     };
   },
   methods: {
-    addProduct(data) {
-      this.$store.dispatch("addProduct", data);
+    addProduct() {
+      this.$store.dispatch("addProduct", this.product);
 
       this.$formulate.reset("product-add");
     },
