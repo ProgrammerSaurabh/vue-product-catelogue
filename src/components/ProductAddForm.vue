@@ -7,12 +7,14 @@
         name="name"
         validation="required"
         label="Product name"
+        data-testid="product-name"
       />
       <FormulateInput
         type="text"
         name="price"
         validation="required"
         label="Product price"
+        data-testid="product-price"
       />
       <FormulateInput
         type="url"
@@ -20,8 +22,13 @@
         validation="required"
         help="Image url to be added"
         label="Product image"
+        data-testid="product-image"
       />
-      <FormulateInput type="submit" label="Add product" />
+      <FormulateInput
+        data-testid="product-add-button"
+        type="submit"
+        label="Add product"
+      />
     </FormulateForm>
   </div>
 </template>
@@ -43,10 +50,7 @@ export default {
   },
   methods: {
     addProduct(data) {
-      this.$store.commit("products", [
-        { ...data, id: this.$store.state.products.length + 1 },
-        ...this.$store.state.products,
-      ]);
+      this.$store.dispatch("addProduct", data);
 
       this.$formulate.reset("product-add");
     },

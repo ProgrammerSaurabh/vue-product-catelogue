@@ -51,6 +51,13 @@ export const store = {
         console.log(error);
       }
     },
+    async addProduct(context, product) {
+      let products = context.state.products;
+      context.commit("products", [
+        { ...product, id: products + 1 },
+        ...products,
+      ]);
+    },
     checkAuth(context) {
       const token = Cookies.get("_token");
 
