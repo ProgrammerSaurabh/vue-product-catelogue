@@ -2,6 +2,7 @@
   <button
     v-if="loggedIn"
     class="btn btn-danger"
+    data-testid="remove-btn"
     :title="`Remove ${product.name} from cart`"
     @click="removeFrom"
   >
