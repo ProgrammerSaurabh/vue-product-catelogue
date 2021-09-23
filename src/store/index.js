@@ -10,6 +10,36 @@ export const store = {
     _token: null,
     user: {},
   },
+  getters: {
+    cartsCount(state) {
+      return Object.keys(state.carts).length;
+    },
+    name(state) {
+      return state.loggedIn ? state.user.name : "Guest";
+    },
+    totalPrice(state) {
+      let price = 0;
+      for (const productId in state.carts) {
+        if (Object.hasOwnProperty.call(state.carts, productId)) {
+          price +=
+            parseInt(state.carts[productId].quantity) *
+            parseInt(state.carts[productId].price.replaceAll(",", ""));
+        }
+      }
+
+      return price;
+    },
+    totalQuantity(state) {
+      let quantity = 0;
+      for (const productId in state.carts) {
+        if (Object.hasOwnProperty.call(state.carts, productId)) {
+          quantity += parseInt(state.carts[productId].quantity);
+        }
+      }
+
+      return quantity;
+    },
+  },
   mutations: {
     products(state, products) {
       state.products = products;
@@ -27,44 +57,56 @@ export const store = {
       state.carts = carts;
     },
     addToCart(state, product) {
-      let cartsData = { ...state.carts };
+      if (state.loggedIn) {
+        let cartsData = { ...state.carts };
 
-      if (!Object.keys(cartsData).includes(product.id)) {
-        cartsData[product.id] = {
-          ...product,
-          quantity: 0,
-        };
+        if (!Object.keys(cartsData).includes(product.id)) {
+          cartsData[product.id] = {
+            ...product,
+            quantity: 0,
+          };
+        }
+
+        cartsData[product.id].quantity++;
+
+        state.carts = cartsData;
       }
+    },
+    increaseCartQuantity(state, product) {
+      state.carts[product.id].quantity++;
+    },
+    decreaseCartQuantity(state, product) {
+      if (state.carts[product.id].quantity > 1) {
+        state.carts[product.id].quantity--;
+      }
+    },
+    removeFromCart(state, productId) {
+      let carts = { ...state.carts };
+      delete carts[productId];
 
-      cartsData[product.id].quantity++;
-
-      state.carts = cartsData;
+      state.carts = carts;
     },
   },
   actions: {
-    async loadProducts(context) {
+    async loadProducts({ commit }) {
       try {
         const { data } = await axios.get("/products.json");
 
-        context.commit("products", data.products);
+        commit("products", data.products);
       } catch (error) {
         console.log(error);
       }
     },
-    async addProduct(context, product) {
-      let products = context.state.products;
-      context.commit("products", [
-        { ...product, id: products + 1 },
-        ...products,
-      ]);
+    async addProduct({ state }, product) {
+      state.products.unshift({ ...product, id: state.products.length + 1 });
     },
-    checkAuth(context) {
+    checkAuth({ commit, dispatch }) {
       const token = Cookies.get("_token");
 
       if (!Cookies.get("loggedIn") || !token) {
-        context.commit("loggedIn", false);
-        context.commit("_token", null);
-        context.commit("user", {});
+        commit("loggedIn", false);
+        commit("_token", null);
+        commit("user", {});
         return;
       }
 
@@ -73,22 +115,23 @@ export const store = {
         Cookies.get("loggedIn") === "true" &&
         token
       ) {
-        context.commit("loggedIn", true);
-        context.commit("_token", Cookies.get("_token"));
+        commit("loggedIn", true);
+        commit("_token", Cookies.get("_token"));
+        dispatch("fetchUser");
       }
     },
-    async fetchUser(context) {
+    async fetchUser({ commit }) {
       try {
         const { data: user } = await axios.get(
           `${process.env.VUE_APP_API_URL}/oauth2/v1/userinfo`
         );
 
-        context.commit("user", user);
+        commit("user", user);
       } catch (error) {
         console.log(error);
       }
     },
-    refreshToken(context) {
+    refreshToken({ commit, dispatch }) {
       const headers = new Headers();
       headers.append("Accept", "application/json");
       headers.append("Content-Type", "application/x-www-form-urlencoded");
@@ -113,22 +156,22 @@ export const store = {
           }
         })
         .then((response) => {
-          context.commit("_token", response.access_token);
-          context.commit("loggedIn", true);
+          commit("_token", response.access_token);
+          commit("loggedIn", true);
 
           Cookies.set("loggedIn", true);
           Cookies.set("_token", response.access_token);
           Cookies.set("expires_in", response.expires_in);
           Cookies.set("refresh_token", response.refresh_token);
 
-          context.dispatch("fetchUser");
+          dispatch("fetchUser");
         })
         .catch((error) => {
           console.log("error", error);
-          context.dispatch("clearData");
+          dispatch("clearData");
         });
     },
-    clearData(context) {
+    clearData({ commit }) {
       [
         "loggedIn",
         "_token",
@@ -138,10 +181,10 @@ export const store = {
         "code-verifier",
       ].forEach((key) => Cookies.remove(key));
 
-      context.commit("loggedIn", false);
-      context.commit("_token", null);
-      context.commit("user", {});
-      context.commit("updateCart", {});
+      commit("loggedIn", false);
+      commit("_token", null);
+      commit("user", {});
+      commit("updateCart", {});
     },
   },
 };

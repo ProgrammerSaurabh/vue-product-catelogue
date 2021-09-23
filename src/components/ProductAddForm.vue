@@ -1,7 +1,7 @@
 <template>
   <div class="px-2 pb-2">
     <h2 class="py-2">Add product</h2>
-    <FormulateForm name="product-add">
+    <FormulateForm name="product-add" @submit="addProduct">
       <FormulateInput
         type="text"
         name="name"
@@ -30,7 +30,7 @@
       <FormulateInput
         data-testid="product-add-button"
         type="button"
-        @click="addProduct"
+        @click="$formulate.submit('product-add')"
         label="Add product"
       />
     </FormulateForm>
@@ -59,7 +59,6 @@ export default {
   methods: {
     addProduct() {
       this.$store.dispatch("addProduct", this.product);
-
       this.$formulate.reset("product-add");
     },
   },

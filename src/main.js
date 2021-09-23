@@ -21,13 +21,11 @@ Vue.use(VueMeta, {
 
 new Vue({
   render: (h) => h(App),
-  computed: Vuex.mapState(["loggedIn"]),
-  methods: Vuex.mapActions(["loadProducts", "checkAuth", "fetchUser"]),
+  methods: Vuex.mapActions(["loadProducts", "checkAuth"]),
   store: new Vuex.Store(store),
   router,
   mounted() {
     this.loadProducts();
     this.checkAuth();
-    this.loggedIn && this.fetchUser();
   },
 }).$mount("#app");

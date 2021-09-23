@@ -5,7 +5,7 @@
         <h4>Back</h4>
       </router-link>
     </div>
-    <div v-if="Object.keys(carts).length > 0" class="py-2">
+    <div v-if="cartsCount > 0" class="py-2">
       <table>
         <tr>
           <th>Image</th>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import EmptyData from "./EmptyData";
 import RemoveFromCart from "./RemoveFromCart";
 
@@ -74,45 +74,14 @@ export default {
   },
   computed: {
     ...mapState(["carts"]),
-    totalPrice() {
-      let price = 0;
-      for (const productId in this.carts) {
-        if (Object.hasOwnProperty.call(this.carts, productId)) {
-          price +=
-            parseInt(this.carts[productId].quantity) *
-            parseInt(this.carts[productId].price.replaceAll(",", ""));
-        }
-      }
-
-      return price;
-    },
-    totalQuantity() {
-      let quantity = 0;
-      for (const productId in this.carts) {
-        if (Object.hasOwnProperty.call(this.carts, productId)) {
-          quantity += parseInt(this.carts[productId].quantity);
-        }
-      }
-
-      return quantity;
-    },
+    ...mapGetters(["cartsCount", "totalPrice", "totalQuantity"]),
   },
   methods: {
     decreaseQuantity(product) {
-      if (product.quantity > 1) {
-        let cartsData = { ...this.$store.state.carts };
-
-        cartsData[product.id].quantity--;
-
-        this.$store.commit("updateCart", cartsData);
-      }
+      this.$store.commit("decreaseCartQuantity", product);
     },
     increaseQuantity(product) {
-      let cartsData = { ...this.$store.state.carts };
-
-      cartsData[product.id].quantity++;
-
-      this.$store.commit("updateCart", cartsData);
+      this.$store.commit("increaseCartQuantity", product);
     },
   },
 };

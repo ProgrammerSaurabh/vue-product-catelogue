@@ -3,7 +3,7 @@
     v-if="loggedIn"
     class="btn btn-primary"
     :title="`Add ${product && product.name} to cart`"
-    @click="addToCart(product)"
+    @click="addToCart"
     data-testid="add-to-cart"
   >
     Add to cart
@@ -24,8 +24,8 @@ export default {
     },
   },
   methods: {
-    addToCart(product) {
-      this.loggedIn && this.$store.commit("addToCart", product);
+    addToCart() {
+      this.$store.commit("addToCart", this.product);
     },
   },
 };

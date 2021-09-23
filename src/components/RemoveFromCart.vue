@@ -3,7 +3,7 @@
     v-if="loggedIn"
     class="btn btn-danger"
     :title="`Remove ${product.name} from cart`"
-    @click="removeFrom(product.id)"
+    @click="removeFrom"
   >
     Remove from cart
   </button>
@@ -23,10 +23,8 @@ export default {
     },
   },
   methods: {
-    removeFrom(id) {
-      let cartsData = { ...this.$store.state.carts };
-      delete cartsData[id];
-      this.$store.commit("updateCart", { ...cartsData });
+    removeFrom() {
+      this.$store.commit("removeFromCart", this.product.id);
     },
   },
 };

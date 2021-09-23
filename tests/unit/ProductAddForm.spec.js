@@ -1,8 +1,8 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import VueFormulate from "@braid/vue-formulate";
 import Vuex from "vuex";
-import ProductAddForm from "../../src/components/ProductAddForm";
-import { store as Store } from "../../src/store";
+import ProductAddForm from "@/components/ProductAddForm";
+import { store as Store } from "@/store";
 import { products } from "../../public/products.json";
 import flushPromises from "flush-promises";
 

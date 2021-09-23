@@ -16,7 +16,7 @@
         <div class="product__price" :title="`Price is ${product.price}`">
           &#8377; {{ product.price }}
         </div>
-        <AddToCart :product="product" v-if="!notInCart" />
+        <AddToCart :product="product" v-if="!inCart" />
         <RemoveFromCart :product="product" v-else />
       </div>
     </div>
@@ -38,8 +38,8 @@ export default {
   },
   computed: {
     ...mapState(["carts"]),
-    notInCart() {
-      return !!this.carts[this.product.id];
+    inCart() {
+      return Object.keys(this.carts).includes(this.product.id.toString());
     },
   },
 };

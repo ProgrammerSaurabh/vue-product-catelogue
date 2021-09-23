@@ -4,10 +4,10 @@
       <router-link to="/">
         <h1>Products catalogue</h1>
       </router-link>
-      <ul>
+      <ul data-testid="action-li">
         <li v-if="!loggedIn" @click="login">Login</li>
         <li v-else class="drop-down">
-          {{ user.name }}
+          {{ name }}
           <ul class="drop-down-menu">
             <li @click="logout">
               <i class="fa fa-sign-out-alt"></i>&nbsp;Logout
@@ -18,8 +18,8 @@
           <router-link to="/carts">
             <div class="cart-container">
               <i class="fa fa-shopping-cart"></i>
-              <span>
-                {{ Object.keys(carts).length }}
+              <span v-show="cartsCount > 0">
+                {{ cartsCount }}
               </span>
             </div>
           </router-link>
@@ -30,18 +30,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js/crypto-js";
+import { callbackUrl } from "../helpers";
 
 export default {
   computed: {
-    ...mapState(["carts", "loggedIn", "user"]),
+    ...mapState(["carts", "loggedIn"]),
+    ...mapGetters(["cartsCount", "name"]),
   },
   methods: {
-    callbackUrl() {
-      return window.location.origin + "/login/callback";
-    },
     codeChallege() {
       var verifier = Cookies.get("code-verifier");
       if (undefined == verifier) {
@@ -88,7 +87,7 @@ export default {
         "profile",
       ].join(
         " "
-      )}&redirect_uri=${this.callbackUrl()}&state=${state}&code_challenge_method=S256&code_challenge=${codeChallege}`;
+      )}&redirect_uri=${callbackUrl()}&state=${state}&code_challenge_method=S256&code_challenge=${codeChallege}`;
 
       a.click();
     },

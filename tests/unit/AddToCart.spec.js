@@ -1,8 +1,8 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
-import { store as Store } from "../../src/store";
+import { store as Store } from "@/store";
 import { products } from "../../public/products.json";
-import AddToCart from "../../src/components/AddToCart";
+import AddToCart from "@/components/AddToCart";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -10,21 +10,21 @@ localVue.use(Vuex);
 describe("AddToCart", () => {
   const store = new Vuex.Store(Store);
 
+  let product;
+
   beforeEach(async () => {
     await store.commit("products", products);
+    product = store.state.products[0];
   });
 
-  it("doesn't show add-to-cart button when not loggedIn", () => {
+  it("should not show add-to-cart button when not loggedIn", () => {
     const wrapper = mount(AddToCart, {
       store,
       localVue,
     });
 
     wrapper.setProps({
-      product: {
-        name: "Product1",
-        id: 10,
-      },
+      product,
     });
 
     store.commit("loggedIn", false);
@@ -32,17 +32,14 @@ describe("AddToCart", () => {
     expect(wrapper.isVisible()).toBe(false);
   });
 
-  it("show add-to-cart button when loggedIn", async () => {
+  it("should show add-to-cart button when loggedIn", async () => {
     const wrapper = mount(AddToCart, {
       store,
       localVue,
     });
 
     wrapper.setProps({
-      product: {
-        name: "Product1",
-        id: 10,
-      },
+      product,
     });
 
     await store.commit("loggedIn", true);
@@ -50,25 +47,26 @@ describe("AddToCart", () => {
     expect(wrapper.isVisible()).toBe(true);
   });
 
-  it("should add product to store", async () => {
+  it("should add product to store and update quantity", async () => {
     const wrapper = mount(AddToCart, {
       store,
       localVue,
     });
 
     wrapper.setProps({
-      product: {
-        name: "Product1",
-        id: 10,
-      },
+      product,
     });
 
     await store.commit("loggedIn", true);
 
-    expect(10 in store.state.carts).toBe(false);
+    expect(product.id in store.state.carts).toBe(false);
 
-    await wrapper.find("[data-testid='add-to-cart']").trigger("click");
+    const addToCartBtn = wrapper.find("[data-testid='add-to-cart']");
 
-    expect(10 in store.state.carts).toBe(true);
+    await addToCartBtn.trigger("click");
+
+    expect(product.id in store.state.carts).toBe(true);
+
+    expect(store.state.carts[product.id].quantity).toEqual(1);
   });
 });

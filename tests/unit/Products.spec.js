@@ -1,10 +1,10 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
-import Products from "../../src/components/Products";
-import { store as Store } from "../../src/store";
+import Products from "@/components/Products";
+import { store as Store } from "@/store";
 import { products } from "../../public/products.json";
-import ProductAddForm from "../../src/components/ProductAddForm";
-import Product from "../../src/components/Product";
+import ProductAddForm from "@/components/ProductAddForm";
+import Product from "@/components/Product";
 import VueFormulate from "@braid/vue-formulate";
 
 const localVue = createLocalVue();
