@@ -6,14 +6,18 @@
       </router-link>
     </div>
     <div v-if="cartsCount > 0" class="py-2">
-      <table>
+      <table data-testid="cart-table">
         <tr>
           <th>Image</th>
           <th>Name</th>
           <th>Quantity</th>
           <th>Actions</th>
         </tr>
-        <tr v-for="product of carts" :key="product.id">
+        <tr
+          v-for="product of carts"
+          :key="product.id"
+          :data-testid="`product-row-${product.id}`"
+        >
           <td class="img-container">
             <img
               :src="product.image"
@@ -23,24 +27,43 @@
             />
           </td>
           <td>
-            <h1 class="product__title">{{ product.name }}</h1>
+            <h1
+              class="product__title"
+              :data-testid="`product-name-${product.id}`"
+            >
+              {{ product.name }}
+            </h1>
             <div class="product__price" :title="`Price is ${product.price}`">
               &#8377; {{ product.price }}
             </div>
           </td>
           <td>
             <div class="product_quantity">
-              <button @click="decreaseQuantity(product)">
+              <button
+                :data-testid="`product-decrease-quantity-${product.id}`"
+                @click="decreaseQuantity(product)"
+              >
                 <i class="fa fa-minus"></i>
               </button>
-              <div class="product_quantity_box">{{ product.quantity }}</div>
-              <button @click="increaseQuantity(product)">
+              <div
+                class="product_quantity_box"
+                :data-testid="`product-quantity-${product.id}`"
+              >
+                {{ product.quantity }}
+              </div>
+              <button
+                :data-testid="`product-increase-quantity-${product.id}`"
+                @click="increaseQuantity(product)"
+              >
                 <i class="fa fa-plus"></i>
               </button>
             </div>
           </td>
           <td>
-            <RemoveFromCart :product="product" />
+            <RemoveFromCart
+              :data-testid="`product-remove-${product.id}`"
+              :product="product"
+            />
           </td>
         </tr>
         <tr>

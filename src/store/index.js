@@ -23,7 +23,7 @@ export const store = {
         if (Object.hasOwnProperty.call(state.carts, productId)) {
           price +=
             parseInt(state.carts[productId].quantity) *
-            parseInt(state.carts[productId].price.replaceAll(",", ""));
+            parseInt(state.carts[productId].price.toString().replace(",", ""));
         }
       }
 
