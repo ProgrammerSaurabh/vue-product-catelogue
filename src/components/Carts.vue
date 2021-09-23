@@ -30,6 +30,7 @@
             <h1
               class="product__title"
               :data-testid="`product-name-${product.id}`"
+              :title="product.name"
             >
               {{ product.name }}
             </h1>
