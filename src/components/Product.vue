@@ -11,7 +11,9 @@
       </div>
     </div>
     <div class="product__content">
-      <h1 class="product__title">{{ product.name }}</h1>
+      <h1 class="product__title" data-testid="product-name">
+        {{ product.name }}
+      </h1>
       <div class="product__description">
         <div class="product__price" :title="`Price is ${product.price}`">
           &#8377; {{ product.price }}

@@ -2,7 +2,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 import VueRouter from "vue-router";
 import { store as Store } from "@/store";
-import { router } from "@/router";
+import { products } from "../../public/products.json";
 import Navbar from "@/components/Navbar";
 
 const localVue = createLocalVue();
@@ -15,6 +15,7 @@ describe("Navbar", () => {
 
   beforeEach(async () => {
     await store.commit("loggedIn", false);
+    await store.commit("products", products);
   });
 
   it("should show login li when not loggedIn", () => {
@@ -53,5 +54,24 @@ describe("Navbar", () => {
     await store.commit("user", user);
 
     expect(wrapper.find("[data-testid='user-name']").text()).toEqual(user.name);
+  });
+
+  it("should show proper count on cart add", async () => {
+    const wrapper = mount(Navbar, {
+      store,
+      localVue,
+      stubs: ["router-link", "router-view"],
+    });
+
+    await store.commit("loggedIn", true);
+    await store.commit("user", user);
+
+    await store.commit("addToCart", store.state.products[0]);
+
+    expect(wrapper.find("[data-testid='cart-span']").isVisible()).toBeTruthy();
+    expect(wrapper.find("[data-testid='cart-span']").text()).toEqual("1");
+
+    await store.commit("addToCart", store.state.products[1]);
+    expect(wrapper.find("[data-testid='cart-span']").text()).toEqual("2");
   });
 });
