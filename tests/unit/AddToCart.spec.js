@@ -14,6 +14,7 @@ describe("AddToCart", () => {
 
   beforeEach(async () => {
     await store.commit("products", products);
+    await store.commit("loggedIn", false);
     product = store.state.products[0];
   });
 
@@ -26,8 +27,6 @@ describe("AddToCart", () => {
     wrapper.setProps({
       product,
     });
-
-    store.commit("loggedIn", false);
 
     expect(wrapper.isVisible()).toBe(false);
   });

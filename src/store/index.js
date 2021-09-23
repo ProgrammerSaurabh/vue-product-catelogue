@@ -60,7 +60,7 @@ export const store = {
       if (state.loggedIn) {
         let cartsData = { ...state.carts };
 
-        if (!Object.keys(cartsData).includes(product.id)) {
+        if (!Object.keys(cartsData).includes(product.id.toString())) {
           cartsData[product.id] = {
             ...product,
             quantity: 0,

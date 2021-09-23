@@ -4,21 +4,21 @@
       <router-link to="/">
         <h1>Products catalogue</h1>
       </router-link>
-      <ul data-testid="action-li">
-        <li v-if="!loggedIn" @click="login">Login</li>
-        <li v-else class="drop-down">
-          {{ name }}
+      <ul>
+        <li v-if="!loggedIn" data-testid="guest-li" @click="login">Login</li>
+        <li v-else class="drop-down" data-testid="auth-li">
+          <span data-testid="user-name">{{ name }}</span>
           <ul class="drop-down-menu">
             <li @click="logout">
               <i class="fa fa-sign-out-alt"></i>&nbsp;Logout
             </li>
           </ul>
         </li>
-        <li v-if="loggedIn">
+        <li v-if="loggedIn" data-testid="cart-li">
           <router-link to="/carts">
             <div class="cart-container">
               <i class="fa fa-shopping-cart"></i>
-              <span v-show="cartsCount > 0">
+              <span v-show="cartsCount > 0" data-testid="cart-span">
                 {{ cartsCount }}
               </span>
             </div>
