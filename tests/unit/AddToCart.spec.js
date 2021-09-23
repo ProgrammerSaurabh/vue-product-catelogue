@@ -22,49 +22,46 @@ describe("AddToCart", () => {
     const wrapper = mount(AddToCart, {
       store,
       localVue,
+      propsData: {
+        product,
+      },
     });
 
-    wrapper.setProps({
-      product,
-    });
-
-    expect(wrapper.isVisible()).toBe(false);
+    expect(wrapper.isVisible()).toBeFalsy();
   });
 
   it("should show add-to-cart button when loggedIn", async () => {
     const wrapper = mount(AddToCart, {
       store,
       localVue,
-    });
-
-    wrapper.setProps({
-      product,
+      propsData: {
+        product,
+      },
     });
 
     await store.commit("loggedIn", true);
 
-    expect(wrapper.isVisible()).toBe(true);
+    expect(wrapper.isVisible()).toBeTruthy();
   });
 
   it("should add product to store and update quantity", async () => {
     const wrapper = mount(AddToCart, {
       store,
       localVue,
-    });
-
-    wrapper.setProps({
-      product,
+      propsData: {
+        product,
+      },
     });
 
     await store.commit("loggedIn", true);
 
-    expect(product.id in store.state.carts).toBe(false);
+    expect(product.id in store.state.carts).toBeFalsy();
 
     const addToCartBtn = wrapper.find("[data-testid='add-to-cart']");
 
     await addToCartBtn.trigger("click");
 
-    expect(product.id in store.state.carts).toBe(true);
+    expect(product.id in store.state.carts).toBeTruthy();
 
     expect(store.state.carts[product.id].quantity).toEqual(1);
   });

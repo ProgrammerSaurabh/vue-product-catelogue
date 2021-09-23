@@ -23,23 +23,21 @@ describe("RemoveFromCart", () => {
     const wrapper = mount(RemoveFromCart, {
       store,
       localVue,
+      propsData: {
+        product,
+      },
     });
 
-    wrapper.setProps({
-      product,
-    });
-
-    expect(wrapper.isVisible()).toBe(false);
+    expect(wrapper.isVisible()).toBeFalsy();
   });
 
   it("should show remove product from cart", async () => {
     const wrapper = mount(RemoveFromCart, {
       store,
       localVue,
-    });
-
-    wrapper.setProps({
-      product,
+      propsData: {
+        product,
+      },
     });
 
     await store.commit("loggedIn", true);

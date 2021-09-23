@@ -24,7 +24,6 @@ describe("Product", () => {
     const wrapper = mount(Product, {
       store,
       localVue,
-      components: { AddToCart, RemoveFromCart },
       propsData: { product },
     });
 
@@ -39,25 +38,21 @@ describe("Product", () => {
     const wrapper = mount(Product, {
       store,
       localVue,
-      components: { AddToCart, RemoveFromCart },
       propsData: { product },
     });
 
     await store.commit("loggedIn", true);
 
     expect(wrapper.findComponent(RemoveFromCart).exists()).toBeFalsy();
-    expect(wrapper.findComponent(AddToCart).exists()).toEqual(
-      !wrapper.vm.inCart
-    );
+    expect(wrapper.findComponent(AddToCart).exists()).toBeTruthy();
   });
 
-  it("should show product remove from cart button when product is in cart", async () => {
+  it("should show remove-from-cart button when product is in cart", async () => {
     const product = store.state.products[0];
 
     const wrapper = mount(Product, {
       store,
       localVue,
-      components: { AddToCart, RemoveFromCart },
       propsData: { product },
     });
 

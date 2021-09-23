@@ -2,7 +2,7 @@
   <button
     v-if="loggedIn"
     class="btn btn-primary"
-    :title="`Add ${product && product.name} to cart`"
+    :title="`Add ${product.name} to cart`"
     @click="addToCart"
     data-testid="add-to-cart"
   >

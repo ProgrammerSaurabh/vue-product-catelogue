@@ -17,7 +17,7 @@ describe("ProductAddForm", () => {
     await store.commit("products", products);
   });
 
-  it("adds product", async () => {
+  it("should add product", async () => {
     const wrapper = mount(ProductAddForm, {
       store,
       localVue,
@@ -40,6 +40,7 @@ describe("ProductAddForm", () => {
     expect(store.state.products[0]["name"]).toBe(name);
     expect(store.state.products[0]["price"]).toBe(price);
     expect(store.state.products[0]["image"]).toBe(image);
+
     expect(store.state.products).toHaveLength(10);
   });
 });

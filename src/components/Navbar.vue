@@ -15,7 +15,7 @@
           </ul>
         </li>
         <li v-if="loggedIn" data-testid="cart-li">
-          <router-link to="/carts">
+          <router-link to="/carts" data-testid="router-cart">
             <div class="cart-container">
               <i class="fa fa-shopping-cart"></i>
               <span v-show="cartsCount > 0" data-testid="cart-span">

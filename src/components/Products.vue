@@ -10,21 +10,13 @@
         data-testid="product"
       />
     </div>
-    <div v-else class="text-center">
-      <img
-        src="/images/no-products.svg"
-        class="svg-img"
-        alt="No products"
-        title="No products"
-        height="400"
-      />
-      <h1>No products</h1>
-    </div>
+    <EmptyData v-else text="No products" />
   </div>
 </template>
 
 <script>
 import ProductAddForm from "./ProductAddForm";
+import EmptyData from "./EmptyData";
 import Product from "./Product";
 import { mapState } from "vuex";
 
@@ -35,6 +27,7 @@ export default {
   components: {
     ProductAddForm,
     Product,
+    EmptyData,
   },
   computed: {
     ...mapState(["products"]),

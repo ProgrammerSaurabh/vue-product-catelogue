@@ -5,7 +5,6 @@ import { store as Store } from "@/store";
 import { products } from "../../public/products.json";
 import Carts from "@/components/Carts";
 import EmptyData from "@/components/EmptyData";
-import RemoveFromCart from "@/components/RemoveFromCart";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -31,7 +30,6 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      components: { RemoveFromCart, EmptyData },
       stubs: ["router-link", "router-view"],
     });
 
@@ -42,7 +40,6 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      components: { RemoveFromCart, EmptyData },
       stubs: ["router-link", "router-view"],
     });
 
@@ -56,7 +53,6 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      components: { RemoveFromCart, EmptyData },
       stubs: ["router-link", "router-view"],
     });
 
@@ -82,7 +78,6 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      components: { RemoveFromCart, EmptyData },
       stubs: ["router-link", "router-view"],
     });
 
@@ -108,7 +103,6 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      components: { RemoveFromCart, EmptyData },
       stubs: ["router-link", "router-view"],
     });
 
@@ -138,7 +132,6 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      components: { RemoveFromCart, EmptyData },
       stubs: ["router-link", "router-view"],
     });
 
@@ -176,13 +169,18 @@ describe("Carts", () => {
       .trigger("click");
 
     expect(store.state.carts[randomProduct.id].quantity).toEqual(1);
+
+    await wrapper
+      .find(`[data-testid='product-decrease-quantity-${randomProduct.id}']`)
+      .trigger("click");
+
+    expect(store.state.carts[randomProduct.id].quantity).toEqual(1);
   });
 
   it("should remove product", async () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      components: { RemoveFromCart, EmptyData },
       stubs: ["router-link", "router-view"],
     });
 
