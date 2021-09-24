@@ -1,4 +1,4 @@
-# product-catalogue
+# Vue Product Catalogue
 
 ## Copy environment variables
 
