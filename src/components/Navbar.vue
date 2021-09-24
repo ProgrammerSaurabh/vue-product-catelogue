@@ -33,7 +33,6 @@
 import { mapState, mapGetters } from "vuex";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js/crypto-js";
-import { callbackUrl } from "../helpers";
 
 export default {
   computed: {
@@ -85,9 +84,9 @@ export default {
         "offline_access",
         "openid",
         "profile",
-      ].join(
-        " "
-      )}&redirect_uri=${callbackUrl()}&state=${state}&code_challenge_method=S256&code_challenge=${codeChallege}`;
+      ].join(" ")}&redirect_uri=${
+        process.env.VUE_APP_REDIRECT_URL
+      }&state=${state}&code_challenge_method=S256&code_challenge=${codeChallege}`;
 
       a.click();
     },

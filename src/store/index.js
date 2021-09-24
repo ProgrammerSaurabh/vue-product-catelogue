@@ -1,6 +1,5 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { callbackUrl } from "../helpers";
 
 export const store = {
   state: {
@@ -139,7 +138,7 @@ export const store = {
       const urlencoded = new URLSearchParams();
       urlencoded.append("grant_type", "refresh_token");
       urlencoded.append("client_id", process.env.VUE_APP_CLIENT_ID);
-      urlencoded.append("redirect_uri", callbackUrl());
+      urlencoded.append("redirect_uri", process.env.VUE_APP_REDIRECT_URL);
       urlencoded.append("refresh_token", Cookies.get("refresh_token"));
 
       const requestOptions = {
