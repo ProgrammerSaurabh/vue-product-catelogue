@@ -1,7 +1,7 @@
 <template>
   <div class="container text-center">
     <h1>{{ title }}</h1>
-    <div class="loader" v-if="valid">
+    <div class="authorize-loader" v-if="valid">
       <div class="animator"></div>
     </div>
     <h4>{{ text }}</h4>
@@ -45,7 +45,7 @@ export default {
 .container {
   padding: 30px;
 }
-.loader {
+.authorize-loader {
   max-width: 80%;
   margin: 10px auto;
   height: 7px;
@@ -62,10 +62,10 @@ export default {
   height: 100%;
   width: 60%;
   background-color: #41b883;
-  animation: loader 2.5s infinite ease-in-out;
+  animation: authorize-loader 2.5s infinite ease-in-out;
 }
 
-@keyframes loader {
+@keyframes authorize-loader {
   from {
     left: -50%;
   }
