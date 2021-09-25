@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import VueRouter from "vue-router";
 
 const routes = [
@@ -34,14 +33,18 @@ router.beforeEach((to, from, next) => {
     if (
       "guest" in to.meta &&
       to.meta.guest &&
-      Cookies.get("loggedIn") &&
-      Cookies.get("loggedIn") === "true"
+      localStorage.getItem("loggedIn") &&
+      localStorage.getItem("loggedIn") === "true"
     ) {
       next("/");
     }
 
     // Only logged in users allowed
-    if ("auth" in to.meta && to.meta.auth && !Cookies.get("loggedIn")) {
+    if (
+      "auth" in to.meta &&
+      to.meta.auth &&
+      !localStorage.getItem("loggedIn")
+    ) {
       next("/");
     }
   }

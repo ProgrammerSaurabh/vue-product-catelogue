@@ -31,7 +31,6 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import Cookies from "js-cookie";
 import CryptoJS from "crypto-js/crypto-js";
 import { callback } from "../helpers";
 
@@ -42,10 +41,10 @@ export default {
   },
   methods: {
     codeChallege() {
-      var verifier = Cookies.get("code-verifier");
+      var verifier = localStorage.getItem("code-verifier");
       if (undefined == verifier) {
         verifier = this.randomString(58);
-        Cookies.set("code-verifier", verifier);
+        localStorage.setItem("code-verifier", verifier);
       }
       return this.base64URL(CryptoJS.SHA256(verifier));
     },
@@ -71,13 +70,13 @@ export default {
     login() {
       const a = document.createElement("a");
 
-      if (!Cookies.get("auth-state")) {
-        Cookies.set("auth-state", this.randomString(16));
+      if (!localStorage.getItem("auth-state")) {
+        localStorage.setItem("auth-state", this.randomString(16));
       }
 
       const codeChallege = this.codeChallege();
 
-      const state = Cookies.get("auth-state");
+      const state = localStorage.getItem("auth-state");
 
       a.href = `${process.env.VUE_APP_API_URL}/oauth2/v1/authorize?client_id=${
         process.env.VUE_APP_CLIENT_ID
