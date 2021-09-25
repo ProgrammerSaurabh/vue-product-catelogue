@@ -31,7 +31,6 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-
 import CryptoJS from "crypto-js/crypto-js";
 import { callback } from "../helpers";
 
