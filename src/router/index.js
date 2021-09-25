@@ -24,7 +24,7 @@ const routes = [
 ];
 
 export const router = new VueRouter({
-  mode: "history",
+  mode: process.env.IS_ELECTRON ? "hash" : "history",
   routes,
 });
 
