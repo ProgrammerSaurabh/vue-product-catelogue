@@ -36,6 +36,12 @@ npm test
 npm run electron:serve
 ```
 
+### Build electron desktop app installer
+
+```
+npm run electron:build
+```
+
 ### Lints and fixes files
 
 ```
