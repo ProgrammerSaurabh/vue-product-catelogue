@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     validateState() {
-      if (this.state != localStorage.getItem("auth-state")) {
+      if (this.state != localStorage.getItem("auth-state") || !this.code) {
         return this.$emit("invalid");
       }
 
