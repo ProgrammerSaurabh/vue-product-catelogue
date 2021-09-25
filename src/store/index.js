@@ -1,5 +1,5 @@
 import axios from "axios";
-import Cookies from "js-cookie";
+
 import { callback } from "../helpers";
 
 export const store = {
@@ -101,9 +101,9 @@ export const store = {
       state.products.unshift({ ...product, id: state.products.length + 1 });
     },
     checkAuth({ commit, dispatch }) {
-      const token = Cookies.get("_token");
+      const token = localStorage.getItem("_token");
 
-      if (!Cookies.get("loggedIn") || !token) {
+      if (!localStorage.getItem("loggedIn") || !token) {
         commit("loggedIn", false);
         commit("_token", null);
         commit("user", {});
@@ -111,12 +111,12 @@ export const store = {
       }
 
       if (
-        Cookies.get("loggedIn") &&
-        Cookies.get("loggedIn") === "true" &&
+        localStorage.getItem("loggedIn") &&
+        localStorage.getItem("loggedIn") === "true" &&
         token
       ) {
         commit("loggedIn", true);
-        commit("_token", Cookies.get("_token"));
+        commit("_token", localStorage.getItem("_token"));
         dispatch("fetchUser");
       }
     },
@@ -140,7 +140,7 @@ export const store = {
       urlencoded.append("grant_type", "refresh_token");
       urlencoded.append("client_id", process.env.VUE_APP_CLIENT_ID);
       urlencoded.append("redirect_uri", callback());
-      urlencoded.append("refresh_token", Cookies.get("refresh_token"));
+      urlencoded.append("refresh_token", localStorage.getItem("refresh_token"));
 
       const requestOptions = {
         method: "POST",
@@ -159,10 +159,10 @@ export const store = {
           commit("_token", response.access_token);
           commit("loggedIn", true);
 
-          Cookies.set("loggedIn", true);
-          Cookies.set("_token", response.access_token);
-          Cookies.set("expires_in", response.expires_in);
-          Cookies.set("refresh_token", response.refresh_token);
+          localStorage.setItem("loggedIn", true);
+          localStorage.setItem("_token", response.access_token);
+          localStorage.setItem("expires_in", response.expires_in);
+          localStorage.setItem("refresh_token", response.refresh_token);
 
           dispatch("fetchUser");
         })
@@ -179,7 +179,7 @@ export const store = {
         "refresh_token",
         "auth-state",
         "code-verifier",
-      ].forEach((key) => Cookies.remove(key));
+      ].forEach((key) => localStorage.removeItem(key));
 
       commit("loggedIn", false);
       commit("_token", null);

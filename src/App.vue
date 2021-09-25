@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
+    <Login v-if="isElectron" />
     <main>
       <router-view></router-view>
     </main>
@@ -8,21 +9,28 @@
 </template>
 
 <script>
+import Login from "@/components/Login";
 import Navbar from "@/components/Navbar";
 import axios from "axios";
-import Cookies from "js-cookie";
 
 export default {
-  components: { Navbar },
+  components: { Navbar, Login },
+  data() {
+    return { isElectron: false };
+  },
   mounted() {
+    if (process.env.IS_ELECTRON) {
+      this.isElectron = true;
+    }
+
     const this_ = this;
 
     axios.interceptors.request.use((config) => {
-      const token = Cookies.get("_token");
+      const token = localStorage.getItem("_token");
 
       if (
-        Cookies.get("loggedIn") &&
-        Cookies.get("loggedIn") === "true" &&
+        localStorage.getItem("loggedIn") &&
+        localStorage.getItem("loggedIn") === "true" &&
         token
       ) {
         config.headers.common["Authorization"] = `Bearer ${token}`;
@@ -34,7 +42,10 @@ export default {
     axios.interceptors.response.use(
       (config) => config,
       (error) => {
-        if (error.response.status === 401 && Cookies.get("refresh_token")) {
+        if (
+          error.response.status === 401 &&
+          localStorage.getItem("refresh_token")
+        ) {
           this_.$store.dispatch("refreshToken");
         }
         throw error;
