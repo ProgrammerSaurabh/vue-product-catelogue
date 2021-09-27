@@ -18,8 +18,7 @@
             <div class="product__price" :title="`Price is ${product.price}`">
               &#8377; {{ product.price }}
             </div>
-            <AddToCart :product="product" v-if="!inCart" />
-            <RemoveFromCart :product="product" v-else />
+            <component :is="component" :product="product"></component>
           </div>
         </div>
       </div>
@@ -30,12 +29,14 @@
 
 <script>
 import { mapState } from "vuex";
-import AddToCart from "./AddToCart";
-import RemoveFromCart from "./RemoveFromCart";
-import EmptyData from "./EmptyData";
 
 export default {
-  components: { AddToCart, RemoveFromCart, EmptyData },
+  components: {
+    AddToCart: () => import(/* webpackChunkName: "AddToCart" */ "./AddToCart"),
+    RemoveFromCart: () =>
+      import(/* webpackChunkName: "RemoveFromCart" */ "./RemoveFromCart"),
+    EmptyData: () => import(/* webpackChunkName: "EmptyData" */ "./EmptyData"),
+  },
   computed: {
     ...mapState(["products", "carts"]),
     product() {
@@ -45,6 +46,9 @@ export default {
     },
     inCart() {
       return Object.keys(this.carts).includes(this.product.id.toString());
+    },
+    component() {
+      return this.inCart ? "RemoveFromCart" : "AddToCart";
     },
   },
 };

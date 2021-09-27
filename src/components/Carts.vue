@@ -84,16 +84,18 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import EmptyData from "./EmptyData";
-import RemoveFromCart from "./RemoveFromCart";
 
 export default {
   metaInfo: {
     title: "Carts",
   },
   components: {
-    EmptyData,
-    RemoveFromCart,
+    EmptyData: () =>
+      import(/* webpackChunkName: "EmptyData" */ "@/components/EmptyData"),
+    RemoveFromCart: () =>
+      import(
+        /* webpackChunkName: "RemoveFromCart" */ "@/components/RemoveFromCart"
+      ),
   },
   computed: {
     ...mapState(["carts"]),

@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from "@vue/test-utils";
+import { createLocalVue, shallowMount, RouterLinkStub } from "@vue/test-utils";
 import Vuex from "vuex";
 import ProductDetail from "@/components/ProductDetail";
 import { store as Store } from "@/store";
@@ -32,13 +32,16 @@ describe("ProductDetail", () => {
   it("should show empty data component on wrong id", () => {
     $route.params.id = products_.length + 1;
 
-    const wrapper = mount(ProductDetail, {
+    const wrapper = shallowMount(ProductDetail, {
       store,
       localVue,
       mocks: {
         $route,
       },
-      stubs: ["router-link", "router-view"],
+      stubs: {
+        EmptyData,
+        RouterLink: RouterLinkStub,
+      },
     });
 
     expect(wrapper.findComponent(EmptyData).exists()).toBeTruthy();
@@ -49,13 +52,15 @@ describe("ProductDetail", () => {
 
     $route.params.id = product.id;
 
-    const wrapper = mount(ProductDetail, {
+    const wrapper = shallowMount(ProductDetail, {
       store,
       localVue,
       mocks: {
         $route,
       },
-      stubs: ["router-link", "router-view"],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     });
 
     expect(wrapper.find("[data-testid='product-name']").text()).toEqual(

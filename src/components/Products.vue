@@ -12,18 +12,16 @@
           v-for="product in products"
           :key="product.id"
           :product="product"
-          data-testid="product"
         />
       </div>
-      <EmptyData v-else text="No products" />
+      <div v-else>
+        <EmptyData text="No products" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import ProductAddForm from "./ProductAddForm";
-import EmptyData from "./EmptyData";
-import Product from "./Product";
 import { mapState } from "vuex";
 
 export default {
@@ -31,9 +29,10 @@ export default {
     title: "Products",
   },
   components: {
-    ProductAddForm,
-    Product,
-    EmptyData,
+    ProductAddForm: () =>
+      import(/* webpackChunkName: "ProductAddForm" */ "./ProductAddForm"),
+    EmptyData: () => import(/* webpackChunkName: "EmptyData" */ "./EmptyData"),
+    Product: () => import(/* webpackChunkName: "Product" */ "./Product"),
   },
   data() {
     return {
@@ -44,9 +43,11 @@ export default {
     ...mapState(["products"]),
   },
   async mounted() {
-    this.loader = true;
-    await this.$store.dispatch("loadProducts");
-    this.loader = false;
+    if (!process.env.JEST_WORKER_ID) {
+      this.loader = true;
+      await this.$store.dispatch("loadProducts");
+      this.loader = false;
+    }
   },
 };
 </script>

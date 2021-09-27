@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from "@vue/test-utils";
+import { mount, createLocalVue, shallowMount } from "@vue/test-utils";
 import Vuex from "vuex";
 import { store as Store } from "@/store";
 import { products } from "../../public/products.json";
@@ -20,7 +20,7 @@ describe("RemoveFromCart", () => {
   });
 
   it("should not show remove-from-cart button when not loggedIn", () => {
-    const wrapper = mount(RemoveFromCart, {
+    const wrapper = shallowMount(RemoveFromCart, {
       store,
       localVue,
       propsData: {

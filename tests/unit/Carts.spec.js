@@ -1,4 +1,9 @@
-import { mount, createLocalVue } from "@vue/test-utils";
+import {
+  mount,
+  createLocalVue,
+  shallowMount,
+  RouterLinkStub,
+} from "@vue/test-utils";
 import Vuex from "vuex";
 import VueRouter from "vue-router";
 import { store as Store } from "@/store";
@@ -27,10 +32,13 @@ describe("Carts", () => {
   });
 
   it("should show empty div if no data available", () => {
-    const wrapper = mount(Carts, {
+    const wrapper = shallowMount(Carts, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: {
+        EmptyData,
+        RouterLink: RouterLinkStub,
+      },
     });
 
     expect(wrapper.findComponent(EmptyData).exists()).toBeTruthy();
@@ -40,7 +48,7 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: ["router-link"],
     });
 
     await store.commit("loggedIn", true);
@@ -53,7 +61,9 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     });
 
     const products_ = [
@@ -78,7 +88,9 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     });
 
     const products_ = [
@@ -103,7 +115,9 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     });
 
     const products_ = [
@@ -132,7 +146,9 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     });
 
     const products_ = [
@@ -181,7 +197,9 @@ describe("Carts", () => {
     const wrapper = mount(Carts, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     });
 
     const products_ = [

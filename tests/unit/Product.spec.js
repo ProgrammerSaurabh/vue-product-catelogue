@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from "@vue/test-utils";
+import { shallowMount, createLocalVue, mount } from "@vue/test-utils";
 import Vuex from "vuex";
 import Product from "@/components/Product";
 import { store as Store } from "@/store";
@@ -35,10 +35,11 @@ describe("Product", () => {
   it("should show product add-to-cart button when product not in cart", async () => {
     const product = store.state.products[0];
 
-    const wrapper = mount(Product, {
+    const wrapper = shallowMount(Product, {
       store,
       localVue,
       propsData: { product },
+      stubs: { AddToCart, RemoveFromCart },
     });
 
     await store.commit("loggedIn", true);
@@ -50,14 +51,15 @@ describe("Product", () => {
   it("should show remove-from-cart button when product is in cart", async () => {
     const product = store.state.products[0];
 
-    const wrapper = mount(Product, {
+    await store.commit("loggedIn", true);
+    await store.commit("addToCart", product);
+
+    const wrapper = shallowMount(Product, {
       store,
       localVue,
       propsData: { product },
+      stubs: { AddToCart, RemoveFromCart },
     });
-
-    await store.commit("loggedIn", true);
-    await store.commit("addToCart", product);
 
     expect(wrapper.findComponent(AddToCart).exists()).toBeFalsy();
     expect(wrapper.findComponent(RemoveFromCart).exists()).toBeTruthy();

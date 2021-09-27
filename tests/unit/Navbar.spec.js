@@ -1,4 +1,4 @@
-import { mount, createLocalVue } from "@vue/test-utils";
+import { mount, createLocalVue, RouterLinkStub } from "@vue/test-utils";
 import Vuex from "vuex";
 import VueRouter from "vue-router";
 import { store as Store } from "@/store";
@@ -22,7 +22,7 @@ describe("Navbar", () => {
     const wrapper = mount(Navbar, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: { RouterLink: RouterLinkStub },
     });
 
     expect(wrapper.find("[data-testid='guest-li']").isVisible()).toBeTruthy();
@@ -33,7 +33,7 @@ describe("Navbar", () => {
     const wrapper = mount(Navbar, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: { RouterLink: RouterLinkStub },
     });
 
     await store.commit("loggedIn", true);
@@ -47,7 +47,7 @@ describe("Navbar", () => {
     const wrapper = mount(Navbar, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: { RouterLink: RouterLinkStub },
     });
 
     await store.commit("loggedIn", true);
@@ -60,7 +60,7 @@ describe("Navbar", () => {
     const wrapper = mount(Navbar, {
       store,
       localVue,
-      stubs: ["router-link", "router-view"],
+      stubs: { RouterLink: RouterLinkStub },
     });
 
     await store.commit("loggedIn", true);

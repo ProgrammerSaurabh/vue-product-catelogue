@@ -1,6 +1,7 @@
-import { mount, createLocalVue } from "@vue/test-utils";
+import { createLocalVue, shallowMount } from "@vue/test-utils";
 import Vuex from "vuex";
 import Products from "@/components/Products";
+import Product from "@/components/Product";
 import EmptyData from "@/components/EmptyData";
 import { store as Store } from "@/store";
 import { products } from "../../public/products.json";
@@ -14,9 +15,17 @@ describe("Products", () => {
   const store = new Vuex.Store(Store);
 
   it("should empty data when no products", () => {
-    const wrapper = mount(Products, {
+    const wrapper = shallowMount(Products, {
       store,
       localVue,
+      data() {
+        return {
+          loader: false,
+        };
+      },
+      stubs: {
+        EmptyData,
+      },
     });
 
     expect(wrapper.findComponent(EmptyData).exists()).toBeTruthy();
@@ -25,13 +34,21 @@ describe("Products", () => {
   it("should show all products", async () => {
     await store.commit("products", products);
 
-    const wrapper = mount(Products, {
+    const wrapper = shallowMount(Products, {
       store,
       localVue,
+      data() {
+        return {
+          loader: false,
+        };
+      },
+      stubs: {
+        Product,
+      },
     });
 
-    const productElements = wrapper.findAll("[data-testid='product']");
-
-    expect(productElements.length).toBe(store.state.products.length);
+    expect(wrapper.findAllComponents(Product).length).toEqual(
+      store.state.products.length
+    );
   });
 });
