@@ -1,4 +1,10 @@
-# product-catalogue
+# Vue Product Catalogue
+
+## Copy environment variables
+
+```
+cp .env.example .env.local
+```
 
 ## Project setup
 ```
