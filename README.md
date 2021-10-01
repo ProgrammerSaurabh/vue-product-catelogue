@@ -42,6 +42,12 @@ npm run electron:serve
 npm run electron:build
 ```
 
+### To create docker image
+docker build -t productcatelogue .
+
+### To run docker image
+docker run -it -p 8080:8080 -d --name productcatelogue productcatelogue
+
 ### Lints and fixes files
 
 ```
