@@ -1,25 +1,29 @@
 import VueRouter from "vue-router";
 
 const routes = [
-  { path: "/", component: () => import("../components/Products") },
+  { path: "/", component: () => import(/* webpackChunkName: "Products" */"@/components/Products") },
   {
     path: "/products/:id",
-    component: () => import("../components/ProductDetail"),
+    component: () => import(/* webpackChunkName: "ProductDetail" */"@/components/ProductDetail"),
   },
   {
     path: "/carts",
-    component: () => import("../components/Carts"),
+    component: () => import(/* webpackChunkName: "Carts" */"@/components/Carts"),
     meta: {
       auth: true,
     },
   },
   {
     path: "/login/callback",
-    component: () => import("../components/Authorize"),
+    component: () => import(/* webpackChunkName: "Authorize" */"@/components/Authorize"),
     meta: {
       guest: true,
     },
   },
+  { 
+    path: '*', 
+    component:  () => import(/* webpackChunkName: "NotFound" */"@/components/NotFound"),
+  }
 ];
 
 export const router = new VueRouter({
